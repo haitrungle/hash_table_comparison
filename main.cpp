@@ -3,9 +3,33 @@
 #include "hasher/hasher.h"
 #include "hashtable/hashtable.h"
 #include <iostream>
+#include <unordered_set>
 
 int main(int argc, char* argv[]) {
     char* arg = argv[1];
+    if (arg[0] == '0') {
+        std::unordered_set<unsigned> set;
+        char buffer[8];
+        unsigned x;
+        while (std::cin >> buffer >> x) {
+            if (buffer[0] == 's') {  // search
+                if (set.find(x) != set.end())
+                    std::cout << x << " was found\n";
+                else
+                    std::cout << x << " does not exist\n";
+            } else if (buffer[0] == 'i') {  // insert
+                set.insert(x);
+            } else {  // delete
+                if (set.find(x) != set.end()) {
+                    std::cout << x << " was deleted successfully\n";
+                    set.erase(x);
+                } else {
+                    std::cout << x << " does not exist\n";
+                }
+            }
+        }
+        return 0;
+    }
     HashTable* table;
     switch (arg[0]) {
         case '1':
@@ -27,7 +51,8 @@ int main(int argc, char* argv[]) {
             table = new HashTable_QP<Hasher_Mul>();
             break;
         default:
-            table = new HashTable_SC<Hasher_Div>();
+            std::cerr << "No argument given";
+            return 1;
     }
 
     char buffer[8];
@@ -49,4 +74,5 @@ int main(int argc, char* argv[]) {
             }
         }
     }
+    return 0;
 }

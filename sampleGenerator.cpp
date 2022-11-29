@@ -14,8 +14,8 @@ int main(int argc, char **argv) {
     const string OPTIONS[3] = {"search", "insert", "delete"};
     char* s = argv[1];
     unsigned int seed = atoi(s);
-    unsigned int numOperations = 400;
-    unsigned int keyUpperBound = 200;
+    unsigned int numOperations = 2000;
+    unsigned int keyUpperBound = 2048;
 
     mt19937 rng(seed);
     uniform_int_distribution<unsigned int> valGen(0, keyUpperBound);

@@ -57,7 +57,7 @@ struct HashTable_QP : HashTable {
     void Delete(unsigned x) {
         unsigned h = hasher.hash(x);
         unsigned i = 0;
-        while (i < (unsigned)size) {
+        while (buckets[p(h, i)].had_value) {
             if (buckets[p(h, i)].data == x) {
                 buckets[p(h, i)].data = (unsigned)-1;
                 count--;

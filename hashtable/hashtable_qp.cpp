@@ -25,7 +25,7 @@
         i(i+1)/2 - j(j+1)/2 = (i-j)(i+j+1)/2 != 0 mod 2^n.
 
     The default size of the table is 32. If the load factor is larger than
-    1/2, the table size is doubled and rehashing occurs.
+    3/4, the table size is doubled and rehashing occurs.
 */
 
 template<class _Hasher>
@@ -108,8 +108,8 @@ struct HashTable_QP : HashTable {
     }
 
     void resize() {
-        // load factor > 1/2
-        if (count_had_value > size / 2) {
+        // load factor > 3/4
+        if (count_had_value > (size / 4) * 3) {
             count_had_value = 0;
             size = 2*size;
             hasher.set_size(size);

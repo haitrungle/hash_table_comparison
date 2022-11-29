@@ -99,8 +99,8 @@ struct HashTable_LP : HashTable {
     }
 
     void resize() {
-        // load factor > 3/4
-        if (count_had_value > (size / 4) * 3) {
+        // load factor > 1/2
+        if (count_had_value > size / 2) {
             count_had_value = 0;
             size = 2*size;
             hasher.set_size(size);

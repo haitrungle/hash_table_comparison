@@ -29,7 +29,7 @@ names=("std::unordered_set, default hashing", "separate chaining, division hashi
 
 X="$1"
 NUM="${2:-10}"
-sum=0
+sum=""
 
 make
 printf "Benchmarking ${names[X]}\n"

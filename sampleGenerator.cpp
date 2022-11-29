@@ -9,6 +9,8 @@ using namespace std;
  * It is bad data generator, as many un-inserted keys will be searched for or deleted from the hash table.
  */
 int main(int argc, char **argv) {
+    ios_base::sync_with_stdio(false);
+    cin.tie(NULL);
     ofstream inputFile("test/input.txt");   // output into the input.txt
     ofstream outputFile("test/output.txt"); // output into the output.txt
     const string OPTIONS[3] = {"search", "insert", "delete"};

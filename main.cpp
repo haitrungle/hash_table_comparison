@@ -6,6 +6,8 @@
 #include <unordered_set>
 
 int main(int argc, char* argv[]) {
+    std::ios_base::sync_with_stdio(false);
+    std::cin.tie(NULL);
     char* arg = argv[1];
     if (arg[0] == '0') {
         std::unordered_set<unsigned> set;

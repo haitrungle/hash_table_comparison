@@ -29,17 +29,29 @@ int main(int argc, char* argv[]) {
 
     ofstream input1("test/input-1.txt");
     unsigned val = valGen(rng) * 2 + 1;
-    for (unsigned i = 0; i < numOperations; i++) {
+    for (unsigned i = 0; i < 200; i++) {
+        input1 << OPTIONS[1] << " " << (val + i*256) % keyUpperBound << "\n";
+    }
+    for (unsigned i = 0; i + 200 < numOperations; i++) {
         unsigned opt = optGen(rng);
-        unsigned sign = signGen(rng) * 2 - 1;
-        input1 << OPTIONS[opt] << " " << (val + i*32) % keyUpperBound << "\n";
+        input1 << OPTIONS[opt] << " " << (val + i*256) % keyUpperBound << "\n";
     }
 
     ofstream input2("test/input-2.txt");
-    for (unsigned i = 0; i < numOperations; i++) {
+    val = valGen(rng) * 2 + 1;
+    for (unsigned i = 0; i < 200; i++) {
+        input1 << OPTIONS[1] << " " << (val + i*2) % keyUpperBound << "\n";
+    }
+    for (unsigned i = 0; i + 200 < numOperations; i++) {
         unsigned opt = optGen(rng);
-        unsigned sign = signGen(rng) * 2 - 1;
         input2 << OPTIONS[opt] << " " << (val + i) % keyUpperBound << "\n";
+    }
+
+    ofstream input3("test/input-3.txt");
+    for (unsigned i = 0; i < numOperations; i++) {
+        unsigned opt = optGen(rng) ? 1 : 0; // 40% search, 60% insert
+        val = valGen(rng);
+        input3 << OPTIONS[opt] << " " << val << "\n";
     }
 
     return 0;

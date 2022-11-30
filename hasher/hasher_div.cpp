@@ -4,7 +4,7 @@
     Hasher_Div: hashing by division
 
     Given the table size m and an integer x, the hash value is
-        
+
         h(x) = x mod m
 
     This is about the simplest hashing method possible. The table size is

@@ -34,7 +34,7 @@ TIMEFORMAT="total: %U+%S seconds"
 make
 
 bin/gen 191 50000 10000
-for (( i=0; i<3; i+=1 )) do
+for (( i=0; i<4; i+=1 )) do
     cat "test/input-$i.txt" | bin/main 0 > "test/output-$i.txt"
 done
 
@@ -44,7 +44,7 @@ benchmark() {
         cat "test/input-$1.txt" | bin/main "$X" > "test/out-$1.txt"
     done
 }
-for (( i=0; i<3; i+=1 )) do
+for (( i=0; i<4; i+=1 )) do
     printf "Input $i\n"
     time benchmark "$i"
     printf "\n"

@@ -42,9 +42,6 @@ printf "\nBenchmarking ${names[X]}\n"
 benchmark() {
     for (( try=0; try<NUM; try+=1 )) do
         cat "test/input-$1.txt" | bin/main "$X" > "test/out-$1.txt"
-        if [[ try -eq 0 ]]; then
-            git diff --unified=0 --no-index "test/out-$1.txt" "test/output-$1.txt"
-        fi
     done
 }
 for (( i=0; i<3; i+=1 )) do

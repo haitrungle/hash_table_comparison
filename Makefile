@@ -8,5 +8,5 @@ all: $(BIN_DIR)/main $(BIN_DIR)/gen
 $(BIN_DIR)/main: main.cpp **/*.cpp Makefile
 	$(CPP) $(CPPFLAGS) -o $@ main.cpp
 
-$(BIN_DIR)/gen: sampleGenerator.cpp Makefile
-	$(CPP) $(CPPFLAGS) -o $@ sampleGenerator.cpp
+$(BIN_DIR)/gen: gen.cpp Makefile
+	$(CPP) $(CPPFLAGS) -o $@ gen.cpp

@@ -18,7 +18,7 @@ implementation. The allowed values of X are:
     5 quadratic probing, division hashing
     6 quadratic probing, multiplicative hashing
 
-The benchmark is ran NUM times, defaulting to 10.
+The benchmark is ran NUM times, defaulting to 50.
 '
     exit
 fi
@@ -28,24 +28,27 @@ cd "$(dirname "$0")"
 names=("std::unordered_set, default hashing", "separate chaining, division hashing" "separate chaining, multiplicative hashing" "linear probing, division hashing" "linear probing, multiplicative hashing" "quadratic probing, division hashing" "quadratic probing, multiplicative hashing")
 
 X="$1"
-NUM="${2:-10}"
-sum=""
+NUM="${2:-50}"
+TIMEFORMAT="total: %U+%S seconds"
 
 make
-printf "Benchmarking ${names[X]}\n"
-for (( i = 1; i <= NUM; i += 1 )) do
-    bin/gen "$(($i*3 + 181))"
 
-    start_time="$(date -u +%s.%N)"
-    cat test/input.txt | bin/main "$X" > test/out.txt
-    end_time="$(date -u +%s.%N)"
-
-    secs="$(bc <<<"$end_time-$start_time")"
-    sum+="$secs + "
-    printf "Run $i: $secs seconds\n"
-
-    git diff --unified=0 --no-index test/out.txt test/output.txt
+bin/gen 191 50000 10000
+for (( i=0; i<3; i+=1 )) do
+    cat "test/input-$i.txt" | bin/main 0 > "test/output-$i.txt"
 done
-sum+="0"
-elapsed="$(bc <<<"$sum")"
-echo "Total: $elapsed seconds"
+
+printf "\nBenchmarking ${names[X]}\n"
+benchmark() {
+    for (( try=0; try<NUM; try+=1 )) do
+        cat "test/input-$1.txt" | bin/main "$X" > "test/out-$1.txt"
+        if [[ try -eq 0 ]]; then
+            git diff --unified=0 --no-index "test/out-$1.txt" "test/output-$1.txt"
+        fi
+    done
+}
+for (( i=0; i<3; i+=1 )) do
+    printf "Input $i\n"
+    time benchmark "$i"
+    printf "\n"
+done

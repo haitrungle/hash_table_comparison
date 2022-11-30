@@ -40,7 +40,7 @@ struct HashTable_QP : HashTable {
     }
 
     void Insert(unsigned x) {
-        resize();
+        if (count_had_value > (size / 4) * 3) resize();
 
         unsigned h = hasher.hash(x);
         unsigned i = 0;
@@ -108,29 +108,26 @@ struct HashTable_QP : HashTable {
     }
 
     void resize() {
-        // load factor > 3/4
-        if (count_had_value > (size / 4) * 3) {
-            count_had_value = 0;
-            size = 2*size;
-            hasher.set_size(size);
-            Entry* new_buckets = new Entry[size];
-            for (int i = 0; i < size/2; ++i) {
-                if (buckets[i].occupied()) {
-                    unsigned x = buckets[i].data;
-                    unsigned h = hasher.hash(x);
-                    unsigned j = 0;
-                    while (new_buckets[p(h, j)].had_value) {
-                        if (new_buckets[p(h, j)].data == x) break;
-                        j++;
-                    }
-                    new_buckets[p(h, j)].data = x;
-                    new_buckets[p(h, j)].had_value = true;
-                    count_had_value++;
+        count_had_value = 0;
+        size = 2*size;
+        hasher.set_size(size);
+        Entry* new_buckets = new Entry[size];
+        for (int i = 0; i < size/2; ++i) {
+            if (buckets[i].occupied()) {
+                unsigned x = buckets[i].data;
+                unsigned h = hasher.hash(x);
+                unsigned j = 0;
+                while (new_buckets[p(h, j)].had_value) {
+                    if (new_buckets[p(h, j)].data == x) break;
+                    j++;
                 }
+                new_buckets[p(h, j)].data = x;
+                new_buckets[p(h, j)].had_value = true;
+                count_had_value++;
             }
-            Entry* old_buckets = buckets;
-            buckets = new_buckets;
-            delete[] old_buckets;
         }
+        Entry* old_buckets = buckets;
+        buckets = new_buckets;
+        delete[] old_buckets;
     }
 };

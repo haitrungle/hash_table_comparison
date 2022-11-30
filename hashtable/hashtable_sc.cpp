@@ -14,7 +14,8 @@
     On collision, we traverse the chain to look for the data. If nothing is
     found, the new Entry is inserted at the end of the chain.
 
-    The size of the table is fixed at 256.
+    The default size of the table is 32. If the load factor exceeds 3/4, the
+    table size is doubled, and rehashing occurs.
 */
 
 template<class _Hasher>
@@ -28,6 +29,8 @@ struct HashTable_SC : HashTable {
     }
 
     void Insert(unsigned x) {
+        if (count > (size / 4) * 3) resize();
+
         unsigned i = hasher.hash(x);
         if (buckets[i].occupied()) {
             Entry* p = &(buckets[i]);
@@ -86,10 +89,37 @@ struct HashTable_SC : HashTable {
         Entry(unsigned d) : data(d), next(nullptr) {};
         bool occupied() { return data + 1 != 0; };
     };
-    const static int DEFAULT_TABLE_SIZE = 256;
+    const static int DEFAULT_TABLE_SIZE = 16;
 
     _Hasher hasher;
     Entry* buckets;
     int count;
     int size;
+
+    void resize() {
+        size = 2*size;
+        hasher.set_size(size);
+        Entry* new_buckets = new Entry[size];
+        for (int i = 0; i < size/2; ++i) {
+            Entry* p = &(buckets[i]);
+            while (p && p->occupied()) {
+                unsigned x = p->data;
+                unsigned h = hasher.hash(x);
+                Entry* q = &(new_buckets[h]);
+                if (q->occupied()) {
+                    while (q->next) {
+                        q = q->next;
+                    }
+                    Entry* e = new Entry(x);
+                    q->next = e;
+                } else {
+                    q->data = x;
+                }
+                p = p->next;
+            }
+        }
+        Entry* old_buckets = buckets;
+        buckets = new_buckets;
+        delete[] old_buckets;
+    }
 };

@@ -23,13 +23,13 @@ struct HashTable_SC : HashTable {
         count = 0;
         size = DEFAULT_TABLE_SIZE;
         buckets = new Entry[DEFAULT_TABLE_SIZE];
-        h = _Hasher();
-        h.set_size(size);
+        hasher = _Hasher();
+        hasher.set_size(size);
     }
 
     void Insert(unsigned x) {
-        int i = h.hash(x);
-        if (buckets[i].data >= 0) {
+        unsigned i = hasher.hash(x);
+        if (buckets[i].occupied()) {
             Entry* p = &(buckets[i]);
             if (p->data == x) return;
             while (p->next) {
@@ -45,27 +45,28 @@ struct HashTable_SC : HashTable {
     }
 
     void Delete(unsigned x) {
-        int i = h.hash(x);
-        if (buckets[i].data >= 0) {
-            Entry* p = &(buckets[i]);
-            if (p->data == x) {
+        unsigned i = hasher.hash(x);
+        Entry* p = &(buckets[i]);
+        if (p->data == x) {
+            if (p->next)
                 buckets[i] = *(p->next);
+            else
+                buckets[i].data = -1;
+            count--;
+            return;
+        }
+        while (p->next) {
+            if (p->next->data == x) {
+                p->next = p->next->next;
                 count--;
                 return;
             }
-            while (p->next) {
-                if (p->next->data == x) {
-                    p->next = p->next->next;
-                    count--;
-                    return;
-                }
-                p = p->next;
-            }
+            p = p->next;
         }
     }
 
     unsigned* Search(unsigned x) {
-        int i = h.hash(x);
+        unsigned i = hasher.hash(x);
         Entry* p = &(buckets[i]);
         while (p) {
             if (p->data == x) {
@@ -83,10 +84,11 @@ struct HashTable_SC : HashTable {
 
         Entry() : data(-1), next(nullptr) {};
         Entry(unsigned d) : data(d), next(nullptr) {};
+        bool occupied() { return data + 1 != 0; };
     };
     const static int DEFAULT_TABLE_SIZE = 256;
 
-    _Hasher h;
+    _Hasher hasher;
     Entry* buckets;
     int count;
     int size;

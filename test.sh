@@ -17,4 +17,4 @@ for (( seed = 1; seed <= 200; seed += 10 )) do
         done
     done
 done
-printf "Done"
+printf "Done\n"

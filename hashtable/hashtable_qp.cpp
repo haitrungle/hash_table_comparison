@@ -24,8 +24,8 @@
     and j in [0, 2^n), we have
         i(i+1)/2 - j(j+1)/2 = (i-j)(i+j+1)/2 != 0 mod 2^n.
 
-    The default size of the table is 32. If the load factor is larger than
-    3/4, the table size is doubled and rehashing occurs.
+    The default size of the table is 32. If the load factor exceeds 3/4, the
+    table size is doubled, and rehashing occurs.
 */
 
 template<class _Hasher>

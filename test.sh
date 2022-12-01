@@ -15,7 +15,7 @@ for (( seed = 1; seed <= 200; seed += 10 )) do
         for (( i=0; i<4; i+=1 )) do
             cat "test/input-$i.txt" | bin/main "$j" > "test/out-$i.txt"
             git diff --unified=0 --no-index "test/out-$i.txt" "test/output-$i.txt"
-            if [[ i -eq 2 ]]; then printf "j = $j\n"; fi
+            if [[ i -eq 3 ]]; then printf "j = $j\n"; fi
         done
     done
 done

@@ -28,12 +28,12 @@ cd "$(dirname "$0")"
 names=("std::unordered_set, default hashing", "separate chaining, division hashing" "separate chaining, multiplicative hashing" "linear probing, division hashing" "linear probing, multiplicative hashing" "quadratic probing, division hashing" "quadratic probing, multiplicative hashing")
 
 X="$1"
-NUM="${2:-50}"
+NUM="${2:-100}"
 TIMEFORMAT="total: %U+%S seconds"
 
 make
 
-bin/gen 191 50000 10000
+bin/gen 191 100000 100000
 for (( i=0; i<4; i+=1 )) do
     cat "test/input-$i.txt" | bin/main 0 > "test/output-$i.txt"
 done

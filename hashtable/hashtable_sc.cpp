@@ -89,7 +89,7 @@ struct HashTable_SC : HashTable {
         Entry(unsigned d) : data(d), next(nullptr) {};
         bool occupied() { return data + 1 != 0; };
     };
-    const static int DEFAULT_TABLE_SIZE = 16;
+    const static int DEFAULT_TABLE_SIZE = 32;
 
     _Hasher hasher;
     Entry* buckets;

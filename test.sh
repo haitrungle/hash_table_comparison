@@ -5,7 +5,7 @@ set -o nounset
 make
 
 for (( seed = 1; seed <= 200; seed += 10 )) do
-    bin/gen "$seed" 50000 10000
+    bin/gen "$seed" 100000 100000
     printf "==== seed = $seed ====\n"
     for (( i=0; i<4; i+=1 )) do
         cat "test/input-$i.txt" | bin/main 0 > "test/output-$i.txt"
